@@ -11,6 +11,8 @@ const PORT=config.get('port')
 
 const app=express();
 
+app.use(express.json());
+
 app.use('/api/v1',api);
 
 app.listen(PORT,()=>{
