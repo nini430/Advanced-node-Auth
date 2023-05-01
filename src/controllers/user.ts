@@ -1,7 +1,7 @@
 import {Request,Response} from 'express'
 
-import { UserInput } from '../schema/userTypes';
-import { createUserService } from '../services/user';
+import { UserInput, VerifyUserInput } from '../schema/userTypes';
+import { createUserService, findUserService } from '../services/user';
 import sendEmail from '../utils/mailer';
 
 export const createUser=async(req:Request<{},{},UserInput>,res:Response)=>{
@@ -22,3 +22,24 @@ export const createUser=async(req:Request<{},{},UserInput>,res:Response)=>{
     }   
 }
 
+export const verifyUser=async(req:Request<VerifyUserInput>,res:Response)=>{
+    const id=req.params.id;
+    const verificationCode=req.params.verificationCode;
+
+    const user=await findUserService(id);
+    if(!user) {
+        return res.status(404).send('Could not verify User');
+    }  
+  
+    if(user.isVerified) {
+        return res.status(400).send('User already Verified')
+    }
+
+    if(user.verificationCode!==verificationCode) {
+        return res.status(400).send('Invalid Verification Code')
+    }
+
+    user.isVerified=true;
+    await user.save();
+    return res.status(200).send('Email verified Sucesfully')
+}

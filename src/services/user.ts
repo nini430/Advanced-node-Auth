@@ -1,6 +1,10 @@
 import UserModel, { User } from "../models/User"
 
 export const createUserService=async(input:Partial<User>)=>{
-    const user=await UserModel.create(input);
-    return user;
+    return UserModel.create(input);
+    
+}
+
+export const findUserService=async(id:string)=>{
+    return UserModel.findById(id);
 }

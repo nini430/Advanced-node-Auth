@@ -24,4 +24,13 @@ export const createUserInput=object({
     })
 })
 
-export type UserInput=TypeOf<typeof createUserInput>['body']; 
+export const verifyUserInput=object({
+    params:object({
+        id:string(),
+        verificationCode:string()
+    })
+})
+
+export type UserInput=TypeOf<typeof createUserInput>['body'];
+export type VerifyUserInput=TypeOf<typeof verifyUserInput>['params'];
+
